@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>TodoList App</title>
+
+	<link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'todolist/bs/css/flatly.min.css' %}">
+	<link rel="stylesheet" href="{% static 'todolist/styles.css' %}">
+
+	<style>
+		body {
+			background: linear-gradient(to right, #ffecd2, #fcb69f);
+			font-family: 'Oswald', sans-serif;
+		}
+
+		#wrapper {
+			padding-top: 40px;
+		}
+
+		#content {
+			background-color: white;
+			border-radius: 15px;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+			padding: 30px;
+		}
+
+		h1 {
+			color: #f40021;
+			text-align: center;
+		}
+
+		.btn-custom {
+			background-color: #f40021;
+			color: white;
+			border: none;
+		}
+
+		.btn-custom:hover {
+			background-color: #c7001a;
+			color: #fff;
+		}
+
+		.todo-completed {
+			background-color: #343a40;
+			color: white;
+			text-decoration: line-through;
+			transition: all 0.3s ease;
+		}
+
+		.list-group-item:hover {
+			background-color: #636363;
+			cursor: pointer;
+		}
+
+		footer {
+			margin-top: 40px;
+			padding: 20px;
+			background-color: #f8f9fa;
+			border-top: 1px solid #dee2e6;
+			text-align: center;
+			color: #6c757d;
+			width: 100%;
+			position: fixed;
+			left: 0;
+
+			bottom: 0;
+		}
+
+		.col-md-6 {
+			max-width: 600px;
+			margin-left: 25%;
+
+		}
+
+		@media (max-width: 768px) {
+			.col-md-6 {
+				max-width: 100%;
+				margin-left: 0;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container" id="wrapper">
+		<div class="row">
+			<div class="col-md-6 col-sm-10 mx-auto" id="content">
+				<h1 style="text-align: center;">What's on your agenda?</h1>
+
+				<form action="{% url 'add' %}" method="POST" role="form" class="mb-4">
+					{% csrf_token %}
+					<div class="form-group">
+						<div class="input-group">
+							{{ form.text }}
+							<button type="submit" class="btn btn-custom ms-2">Add Task</button>
+						</div>
+					</div>
+				</form>
+
+				<div class="mb-3 d-flex justify-content-between">
+					<a href="{% url 'deletecompleted' %}" class="btn btn-warning">
+						<i class="glyphicon glyphicon-trash"></i> Remove Completed Tasks
+					</a>
+					<a href="{% url 'deleteall' %}" class="btn btn-danger">
+						<i class="glyphicon glyphicon-trash"></i> Remove All Tasks
+					</a>
+				</div>
+
+				<ul class="list-group">
+					{% for todolist in todo_items %}
+					{% if todolist.completed %}
+					<li class="list-group-item todo-completed">{{ todolist.text }}</li>
+					{% else %}
+					<a href="{% url 'completed' todolist.id %}" style="text-decoration: none; color: rgb(222, 79, 79);">
+						<li class="list-group-item">{{ todolist.text }}</li>
+					</a>
+					{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+
+		<footer>
+			Copyright &copy 2025
+		</footer>
+	</div>
+
+</body>
+
+</html>
