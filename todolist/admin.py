@@ -4,4 +4,3 @@ from .models import Todolist
 
 
 admin.site.register(Todolist)
-#github denemesi
